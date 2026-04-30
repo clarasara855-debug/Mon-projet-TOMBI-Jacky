@@ -1,0 +1,45 @@
+
+
+# Préparation de l'environnement
+sudo apt update
+sudo apt install -y docker.io git
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+newgrp docker
+
+#  Création du projet 
+mkdir TOMBI_Jacky-flask-app
+cd TOMBI_Jacky-flask-app
+
+# (Créer ici les fichiers : app.py, Dockerfile, requirements.txt)
+
+#  Construction de l'image Docker 
+docker build -t TOMBI_Jacky-flask-app .
+
+#  Vérification de l'image créée 
+docker images
+
+#  Lancement du conteneur 
+docker run -d -p 5000:5000 --name TOMBI_Jacky-container TOMBI_Jacky-flask-app
+
+#    Vérification du conteneur en cours d'exécution 
+docker ps
+
+#    Test de l'application 
+curl http://localhost:5000
+
+#  Push sur DockerHub 
+docker login
+docker tag TOMBI_Jacky-flask-app clarasara855-debug/TOMBI_Jacky-flask-app:latest
+docker push clarasara855-debug/TOMBI_Jacky-flask-app:latest
+
+#    Sauvegarde de l'historique 
+history > historique_commandes.txt
+
+#    Dépôt GitHub 
+git init
+git add .
+git commit -m "TP1 : Application Flask conteneurisée avec Docker"
+git remote add origin https://github.com/clarasara855-debug/TOMBI_Jacky-flask-app.git
+git push -u origin main
